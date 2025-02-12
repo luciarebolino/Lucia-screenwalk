@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Screen Video & Mapbox Weather</title>
+
+    <!-- Mapbox GL JS -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; }
+        .container { width: 100%; height: 100vh; position: relative; display: flex; flex-direction: column; }
+
+        /* ✅ Main Layout */
+        .content { flex-grow: 1; display: flex; width: 100%; height: 100%; position: relative; }
+        .left { flex-grow: 1; background: black; overflow: hidden; position: relative; }
+        .right { width: 0.5%; max-width: 50%; height: 100%; position: absolute; right: 0; top: 0; background: black; }
+        .video-container { position: absolute; width: 100%; height: 100%; transform-origin: center; cursor: grab; user-select: none; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        #map { width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+
+        /* ✅ Draggable Panels */
+        .drag-bar-right { position: absolute; top: 0; left: -1px; width: 3px; height: 100%; background: rgba(0, 0, 0, 1); cursor: ew-resize; z-index: 1000; }
+        .top-panel { width: 100%; height: 1%; position: absolute; top: 0; left: 0; background: rgba(50, 50, 50, 0); z-index: 1500; pointer-events: none; display: flex; flex-direction: column; }
+        .drag-bar-top { position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: rgba(0, 0, 0, 1); cursor: ns-resize; z-index: 1600; pointer-events: all; }
+        
+        /* ✅ Iframe for index3.html */
+        .iframe-container { flex-grow: 1; width: 100%; height: 100%; overflow: hidden; pointer-events: all; background: transparent !important;}
+        .iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent !important;
+}
+
+        /* ✅ Hide All Mapbox UI */
+        .mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-group {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <div id="question-1">
+        <!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ How do we measure this new technological space we’re building? -->
+    </div>
+        <div id="question-2">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ Why do we trust these models? -->
+        </div>
+        <div id="question-3">
+            <!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ Why do we trust science?  -->
+                    </div>
+        <div id="question-4">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ But what about the unknown?  -->
+        </div>
+        <div id="answers?">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ https://luciarebolino.github.io/LR-webpres-screenwalk/ -->
+        </div>
+
+</div>
+    
+
+    <div class="container">
+  
+        <div class="top-panel" id="topPanel">
+            <div class="drag-bar-top" id="dragBarTop"></div>
+            <div class="iframe-container">
+                <iframe src="index3.html" id="topIframe"></iframe>
+            </div>
+        </div>
+
+   
+        <div class="content">
+            <div class="left" id="left">
+                <div class="video-container" id="videoContainer">
+                    <video id="video" src="video/sky.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+            <div class="right" id="right">
+                <div class="drag-bar-right" id="dragBarRight"></div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibHVjaWFyZWJvbGlubyIsImEiOiJja2h5czJyd3UwOGV4MnVtdDdqOWxoMGUwIn0.hQ-Np9Ct0IhcCoQ-cBXfCQ';
+
+  
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-v9',
+            center: [-106.26531762206461, 32.933234991839285],
+            zoom: 20,
+            attributionControl: false,
+            interactive: true
+        });
+
+        map.on('load', () => console.log("Mapbox Loaded"));
+
+  
+        document.addEventListener("DOMContentLoaded", function() {
+            const right = document.getElementById("right");
+            const dragBarRight = document.getElementById("dragBarRight");
+
+            let isDraggingRight = false;
+
+            dragBarRight.addEventListener("mousedown", function(e) {
+                isDraggingRight = true;
+                document.body.style.cursor = "ew-resize";
+                e.preventDefault();
+            });
+
+            document.addEventListener("mousemove", function(e) {
+                if (!isDraggingRight) return;
+                requestAnimationFrame(() => {
+                    let newWidth = window.innerWidth - e.clientX;
+                    newWidth = Math.max(7, Math.min(newWidth, window.innerWidth * 0.5)); // Limits width
+                    right.style.width = `${newWidth}px`;
+                    map.resize();
+                });
+            });
+
+            document.addEventListener("mouseup", function() {
+                isDraggingRight = false;
+                document.body.style.cursor = "default";
+            });
+
+            window.addEventListener("resize", function() {
+                map.resize();
+            });
+        });
+
+  
+        document.addEventListener("DOMContentLoaded", function() {
+            const topPanel = document.getElementById("topPanel");
+            const dragBarTop = document.getElementById("dragBarTop");
+
+            let isDraggingTop = false;
+
+            dragBarTop.addEventListener("mousedown", function(e) {
+                isDraggingTop = true;
+                document.body.style.cursor = "ns-resize";
+                e.preventDefault();
+            });
+
+            document.addEventListener("mousemove", function(e) {
+                if (!isDraggingTop) return;
+                requestAnimationFrame(() => {
+                    let newHeight = e.clientY;
+                    newHeight = Math.max(7, Math.min(newHeight, window.innerHeight)); // Limits height
+                    topPanel.style.height = `${newHeight}px`;
+                });
+            });
+
+            document.addEventListener("mouseup", function() {
+                isDraggingTop = false;
+                document.body.style.cursor = "default";
+            });
+        });
+
+
+                const videoContainer = document.getElementById("videoContainer");
+        let isDraggingVideo = false, startX, startY, offsetX = 0, offsetY = 0, scale = 1;
+
+
+        videoContainer.addEventListener("mousedown", function(e) {
+            isDraggingVideo = true;
+            startX = e.clientX - offsetX;
+            startY = e.clientY - offsetY;
+            videoContainer.style.cursor = "grabbing";
+            e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", function(e) {
+            if (!isDraggingVideo) return;
+            requestAnimationFrame(() => {
+                offsetX = e.clientX - startX;
+                offsetY = e.clientY - startY;
+                videoContainer.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+            });
+        });
+
+        document.addEventListener("mouseup", function() {
+            isDraggingVideo = false;
+            videoContainer.style.cursor = "grab";
+        });
+
+   
+        videoContainer.addEventListener("wheel", function(e) {
+            e.preventDefault();
+            let zoomIntensity = 0.03;
+            scale += (e.deltaY < 0 ? zoomIntensity : -zoomIntensity);
+            scale = Math.min(Math.max(0.5, scale), 15); // Limit zoom range
+            videoContainer.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+        });
+
+
+        videoContainer.addEventListener("dblclick", function() {
+            offsetX = 0;
+            offsetY = 0;
+            scale = 1;
+            videoContainer.style.transform = "translate(0, 0) scale(1)";
+        });
+
+    </script>
+
+</body>
+</html>

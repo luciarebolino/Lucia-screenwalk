@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture</title>
+    <style>
+        body, html {
+            height: 100%; 
+            width: 100%;
+            margin: 0; 
+            overflow: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: rgba(255, 255, 255, 0) !important;
+
+        }
+        .scene {
+            width: 90vw;
+            height: 90vh;
+            perspective: 1000000px;
+            transform-style: preserve-3d;
+            position: relative;
+            user-select: none;
+        }
+        .plane {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            /* border: 1px solid rgba(255, 255, 255, 0); */
+        }
+        #plane1 {
+            transform: translateZ(0px);
+        }
+        #plane2 {
+            transform: rotateX(90deg);
+            transform-origin: center center;
+            /* background: rgba(255, 88, 88); */
+            background-image: url(video/img1.png);
+            background-size: cover;  /* 🔹 Ensures the image covers the entire plane */
+            background-position: center; /* 🔹 Centers the image */
+            background-size: 40%;
+            background-repeat: no-repeat;
+            transition: transform 0.5s ease; /* 🚀 Smooth rotation */
+            cursor: pointer;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        #centerDot {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene" id="scene">
+        <div id="plane1" class="plane">
+            <svg>
+                <defs>
+                    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#3E8DFF; stop-opacity:0.5" />
+                        <stop offset="100%" style="stop-color:#3E8DFF; stop-opacity:0" />
+                    </radialGradient>
+                </defs>
+                <circle id="centerDot" cx="50%" cy="50%" r="7" fill="#3E8DFF" stroke="white" stroke-width="2"></circle>
+            </svg>
+        </div>
+        <div id="plane2" class="plane">
+            <svg id="pathSVG"></svg>
+        </div>
+    </div>
+
+    <div id="question-1">
+        <!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ How do we measure this new technological space we’re building? -->
+        <div id="question-2">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ Why do we trust these models? -->
+        </div>
+        <div id="question-3">
+            <!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ Why do we trust science?  -->
+                    </div>
+        <div id="question-4">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ But what about the unknown?  -->
+        </div>
+        <div id="answers?">
+<!-- ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ ⚙ link -->
+        </div>
+
+</div>
+
+    </div>
+    <script>
+        const coordinates = [
+    { lat: 35.3331, lon: -97.2775 }, // Oklahoma City, OK (KTLX)
+    { lat: 32.5736, lon: -97.3033 }, // Dallas/Ft. Worth, TX (KFWS)
+    { lat: 29.4719, lon: -95.0781 }, // Houston/Galveston, TX (KHGX)
+    { lat: 33.3636, lon: -86.9528 }, // Birmingham, AL (KBMX)
+    { lat: 35.3331, lon: -97.2775 }, // Norman, OK (KOUN)
+    { lat: 39.8250, lon: -84.0536 }, // Wilmington, OH (KILN)
+    { lat: 38.4989, lon: -89.8542 }, // St. Louis, MO (KLSX)
+    { lat: 41.5972, lon: -93.6550 }, // Des Moines, IA (KDMX)
+    { lat: 44.1233, lon: -93.5025 }, // Minneapolis, MN (KMPX)
+    { lat: 40.7408, lon: -74.1808 }, // New York City, NY (KOKX)
+    { lat: 37.9269, lon: -121.2542 }, // Sacramento, CA (KDAX)
+    { lat: 34.6372, lon: -86.7850 }, // Huntsville, AL (KHTX)
+    { lat: 39.3833, lon: -77.9842 }, // Washington DC, VA (KLWX)
+    { lat: 42.7194, lon: -84.3600 }, // Detroit, MI (KDTX)
+    { lat: 40.3203, lon: -75.8272 }, // Philadelphia, PA (KDIX)
+    { lat: 34.4831, lon: -85.7122 }, // Atlanta, GA (KFFC)
+    { lat: 36.7442, lon: -119.8194 }, // Fresno, CA (KHNX)
+    { lat: 42.9464, lon: -78.7353 }, // Buffalo, NY (KBUF)
+    { lat: 35.2381, lon: -80.8175 }, // Charlotte, NC (KGSP)
+    { lat: 36.2372, lon: -115.0347 }, // Las Vegas, NV (KESX)
+    { lat: 47.6814, lon: -122.1244 }, // Seattle, WA (KATX)
+    { lat: 39.1956, lon: -76.7647 }, // Baltimore, MD (KLWX)
+    { lat: 38.8056, lon: -104.5242 }, // Denver, CO (KPUX)
+    { lat: 30.5325, lon: -86.5378 }, // Eglin AFB, FL (KEVX)
+    { lat: 36.9083, lon: -94.8803 }, // Springfield, MO (KSGF)
+    { lat: 35.0403, lon: -106.8172 }, // Albuquerque, NM (KABX)
+    { lat: 43.5703, lon: -96.7283 }, // Sioux Falls, SD (KFSD)
+    { lat: 44.4519, lon: -88.1106 }, // Green Bay, WI (KGRB)
+    { lat: 33.2011, lon: -97.1925 }, // Fort Worth, TX (KFWS)
+    { lat: 31.9397, lon: -102.1889 }, // Midland, TX (KMAF)
+    { lat: 32.3206, lon: -86.9878 }, // Montgomery, AL (KMXX)
+    { lat: 40.5811, lon: -105.1019 }, // Cheyenne, WY (KCYS)
+    { lat: 41.7278, lon: -112.1753 }, // Salt Lake City, UT (KMTX)
+    { lat: 39.3625, lon: -76.8653 }, // Washington D.C. (KLWX)
+    { lat: 47.8981, lon: -97.3578 }, // Grand Forks, ND (KMVX)
+    { lat: 27.7075, lon: -97.4422 }, // Corpus Christi, TX (KCRP)
+    { lat: 32.6822, lon: -117.1669 }, // San Diego, CA (KNKX)
+    { lat: 40.8500, lon: -81.9333 }, // Cleveland, OH (KCLE)
+    { lat: 33.9383, lon: -118.3883 }, // Los Angeles, CA (KVTX)
+    { lat: 32.8969, lon: -97.0308 }, // Dallas, TX (KDFW)
+    { lat: 28.1139, lon: -80.6544 }, // Melbourne, FL (KMLB)
+    { lat: 37.9275, lon: -91.9575 }, // Rolla, MO (KLSX)
+    { lat: 45.5433, lon: -122.4128 }, // Portland, OR (KRTX)
+    { lat: 29.7467, lon: -98.0258 }, // San Antonio, TX (KEWX)
+    { lat: 33.8758, lon: -112.0764 }, // Phoenix, AZ (KIWA)
+    { lat: 39.4464, lon: -123.3511 }  // Eureka, CA (KBHX)
+];
+
+        const images = [
+            'https://i.postimg.cc/c4Tf88Lt/Screenshot-2025-02-09-at-6-03-39-PM.png',
+            'https://i.postimg.cc/MK8HXPGw/Screenshot-2025-02-09-at-6-06-32-PM.png',
+            'https://i.postimg.cc/bwmwCq9Y/Screenshot-2025-02-09-at-6-07-47-PM.png',
+            'https://i.postimg.cc/q7gMWW1s/Screenshot-2025-02-09-at-6-30-15-PM.png',
+            'https://i.postimg.cc/9fSF21kv/Screenshot-2025-02-09-at-6-30-59-PM.png',
+            'https://i.postimg.cc/TwD23gMh/Screenshot-2025-02-09-at-6-33-38-PM.png',
+            
+
+        
+        ];
+        let currentSegment = 0;
+        const svg = document.getElementById('pathSVG');
+        const svgWidth = window.innerWidth;
+        const svgHeight = window.innerHeight;
+
+        document.getElementById('scene').addEventListener('click', function(event) {
+    if (event.target.id !== 'centerDot') {
+        // Convert the image to Base64 and then log it to the console
+        const imageURL = images[currentSegment % images.length];
+        convertImageToBase64(imageURL, function(base64Img) {
+            const css = `
+            background-image: url("${base64Img}");
+                background-size: contain;  // Ensures the image fits within the padding area
+                background-repeat: no-repeat;
+                padding: 200px 330px;  // Increase padding to make the image bigger
+            `;
+            console.log('%c ', css);
+        });
+        currentSegment = (currentSegment + 1) % images.length;
+    } else {
+        drawNextSegment();
+    }
+});
+
+function convertImageToBase64(url, callback) {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = this.naturalWidth;   // or 'width' if you want a special/scaled size
+        canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(this, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        callback(dataURL);
+    };
+    img.onerror = function() {
+        console.error('Could not load the image');
+    };
+    img.src = url;
+}
+
+        function drawNextSegment() {
+            if (currentSegment < coordinates.length - 1) {
+                const start = coordinates[currentSegment];
+                const end = coordinates[currentSegment + 1];
+                const scale = Math.min(svgWidth, svgHeight) / 5;
+                const startX = (start.lon - coordinates[0].lon) * scale + svgWidth / 2;
+                const startY = svgHeight / 2 - (start.lat - coordinates[0].lat) * scale;
+                const endX = (end.lon - coordinates[0].lon) * scale + svgWidth / 2;
+                const endY = svgHeight / 2 - (end.lat - coordinates[0].lat) * scale;
+                const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pathElement.setAttribute("d", `M ${startX} ${startY} L ${endX} ${endY}`);
+                pathElement.setAttribute("stroke", "white");
+                pathElement.setAttribute("stroke-width", "1");
+                pathElement.setAttribute("fill", "none");
+                svg.appendChild(pathElement);
+
+                console.log(`Latitude: ${end.lat}, Longitude: ${end.lon}`);
+                currentSegment++;
+            } else {
+                console.log("All segments have been drawn.");
+            }
+        }
+
+        const scene = document.querySelector('.scene');
+        let isDragging = false;
+        let previousMouseY = 0;
+        let rotationX = 90;
+
+        scene.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            previousMouseY = e.clientY;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                const deltaY = e.clientY - previousMouseY;
+                rotationX += deltaY * 0.1;
+                scene.style.transform = `perspective(1200px) rotateX(${rotationX}deg)`;
+                previousMouseY = e.clientY;
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+    if (event.keyCode === 13) {  // 13 is the key code for the Enter key
+        location.reload();  // Reloads the current document
+    }
+});
+
+// Select plane2
+const plane2 = document.getElementById("plane2");
+
+let rotationAngle = 0; // Track rotation state
+
+// Click event listener
+plane2.addEventListener("click", function() {
+    rotationAngle += 90; // Rotate by 90 degrees on each click
+    plane2.style.transform = `rotateX(90deg) rotateZ(${rotationAngle}deg)`; // Rotate on Z-axis
+});
+
+
+let isRotating = false;
+let spinInterval;
+
+plane2.addEventListener("click", function() {
+    if (isRotating) {
+        clearInterval(spinInterval); // Stop rotation
+        isRotating = false;
+    } else {
+        isRotating = true;
+        spinInterval = setInterval(() => {
+            rotationAngle += 5; // Adjust spin speed
+            plane2.style.transform = `rotateX(90deg) rotateZ(${rotationAngle}deg)`;
+        }, 30); // Adjust timing
+    }
+});
+
+
+    </script>
+</body>
+</html>
